@@ -32,14 +32,19 @@ left_n="$(names_left | wc -l)"
 right_n="$(names_right | wc -l)"
 
 (
-	curl -L "${LICENSE_URI}" | awk '{ print "// " $0 }'
+	echo '//! This crate only contains code transpiled from Go by a shell script.'
+	echo '//! ```'
+	curl -L "${LICENSE_URI}" | awk '{ print "//! " $0 }'
+	echo '//! ```'
+	echo
 	echo "/// Generated left variable from <${NAMES_GENERATOR_URI}>"
 	echo "pub const LEFT: [&'static str; $left_n] = ["
-	names_left | awk '{ print "    " $1 }';
+	names_left | awk '{ print "    " $1 }'
 	echo "];"
+	echo
 	echo "/// Generated right variable from <${NAMES_GENERATOR_URI}>"
 	echo "pub const RIGHT: [&'static str; $right_n] = ["
-	names_right | awk '{ print "    " $1 }';
+	names_right | awk '{ print "    " $1 }'
 	echo "];"
 ) > src/lib.rs
 
